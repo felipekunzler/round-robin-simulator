@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.felipek.roundrobin.gui.Controller">
+   <children>
+      <ListView fx:id="listViewNew" prefWidth="300" HBox.hgrow="SOMETIMES" />
+      <ListView fx:id="listViewRunning" prefWidth="550" HBox.hgrow="SOMETIMES" />
+      <ListView fx:id="listViewFinished" prefWidth="200" HBox.hgrow="SOMETIMES" />
+      <ListView fx:id="listViewQueue" prefWidth="130" HBox.hgrow="SOMETIMES" />
+      <ListView fx:id="listViewIoQueue" prefWidth="130" HBox.hgrow="SOMETIMES" />
+   </children>
+</HBox>
