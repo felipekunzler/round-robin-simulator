@@ -1,9 +1,6 @@
 package com.felipek.roundrobin.core;
 
-import javafx.application.Platform;
-
 import java.util.concurrent.locks.Condition;
-import java.util.function.Consumer;
 
 public final class Util
 {

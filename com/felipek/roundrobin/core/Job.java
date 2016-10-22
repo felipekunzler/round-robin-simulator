@@ -29,6 +29,11 @@ public class Job implements Cloneable
         return duration <= 0;
     }
 
+    public int getPid()
+    {
+        return pid;
+    }
+
     public int getDuration()
     {
         return duration;
