@@ -76,18 +76,7 @@ public class RoundRobin
             }
             else
             {
-                try
-                {
-                    jobCondition.await();
-                }
-                catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-                finally
-                {
-                    jobLock.unlock();
-                }
+                Util.waitForCondition(jobCondition, jobLock);
             }
         }
 
@@ -101,9 +90,9 @@ public class RoundRobin
             {
                 Util.sleep(newJobsFrequency);
                 Job job = Job.createRandomJob(jobDuration);
-                jobLock.lock();
                 queue.add(job);
                 onNewJob.accept(Job.copy(job));
+                jobLock.lock();
                 jobCondition.signalAll();
                 jobLock.unlock();
             }
@@ -127,18 +116,7 @@ public class RoundRobin
                 }
                 else
                 {
-                    try
-                    {
-                        ioCondition.await();
-                    }
-                    catch (InterruptedException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    finally
-                    {
-                        ioLock.unlock();
-                    }
+                    Util.waitForCondition(ioCondition, ioLock);
                 }
             }
         }).start();

@@ -1,6 +1,7 @@
 package com.felipek.roundrobin.core;
 
 import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 
 public final class Util
 {
@@ -23,7 +24,7 @@ public final class Util
         }
     }
 
-    public static void waitForCondition(Condition condition)
+    public static void waitForCondition(Condition condition, Lock lock)
     {
         try
         {
@@ -32,6 +33,10 @@ public final class Util
         catch (InterruptedException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            lock.unlock();
         }
     }
 
