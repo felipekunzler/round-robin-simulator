@@ -49,16 +49,17 @@ public class SetupController implements Initializable
             int ioBlockPercentage = Integer.parseInt(ioBlockPercentageText.getText());
             int ioBlockDuration = Integer.parseInt(ioBlockDurationText.getText());
 
-            RoundRobin roundRobinSimulator =
-                    new RoundRobin(newJobsFrequency, quantum, jobDuration, ioBlockPercentage, ioBlockDuration);
-            MainController.setRoundRobinSimulator(roundRobinSimulator);
-
             Stage stage = (Stage) newJobsFrequencyText.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main-layout.fxml"));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
             stage.centerOnScreen();
             stage.show();
+
+            MainController mainController = loader.getController();
+            RoundRobin roundRobinSimulator =
+                    new RoundRobin(newJobsFrequency, quantum, jobDuration, ioBlockPercentage, ioBlockDuration);
+            mainController.startSimulator(roundRobinSimulator);
         }
         catch (NumberFormatException e)
         {

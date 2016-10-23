@@ -11,9 +11,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-public class MainController implements Initializable
+public class MainController
 {
-
     @FXML
     private ListView<String> listViewNew;
     @FXML
@@ -21,14 +20,11 @@ public class MainController implements Initializable
     @FXML
     private ListView<String> listViewFinished;
     @FXML
-    private ListView<Integer> listViewQueue;
+    private ListView<String> listViewQueue;
     @FXML
-    private ListView<Integer> listViewIoQueue;
+    private ListView<String> listViewIoQueue;
 
-    private static RoundRobin roundRobinSimulator;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public void startSimulator(RoundRobin roundRobinSimulator)
     {
         Thread thread = new Thread(() ->
         {
@@ -45,43 +41,38 @@ public class MainController implements Initializable
 
         roundRobin.onNewJob(runLater(j ->
         {
-            listViewNew.getItems().add(String.format(Util.JOB_ADDED_MSG, j));
-            listViewQueue.getItems().add(j.getPid());
+            listViewNew.getItems().add(j.toString());
+            listViewQueue.getItems().add(j.toString());
         }));
 
         roundRobin.onJobRan(runLater(j ->
         {
-            listViewQueue.getItems().remove(Integer.valueOf(j.getPid()));
-            listViewQueue.getItems().add(j.getPid());
+            listViewQueue.getItems().remove(j.toString());
+            listViewQueue.getItems().add(j.toString());
         }));
 
         roundRobin.onJobFinished(runLater(j ->
         {
-            listViewQueue.getItems().remove(Integer.valueOf(j.getPid()));
-            listViewFinished.getItems().add(String.format(Util.JOB_FINISHED_MSG, j));
+            listViewQueue.getItems().remove(j.toString());
+            listViewFinished.getItems().add(j.toString());
         }));
 
         roundRobin.onJobIoBlocked(runLater(j ->
         {
-            listViewQueue.getItems().remove(Integer.valueOf(j.getPid()));
-            listViewIoQueue.getItems().add(j.getPid());
+            listViewQueue.getItems().remove(j.toString());
+            listViewIoQueue.getItems().add(j.toString());
         }));
 
         roundRobin.onJobIoFinished(runLater(j ->
         {
-            listViewIoQueue.getItems().remove(Integer.valueOf(j.getPid()));
-            listViewQueue.getItems().add(j.getPid());
+            listViewIoQueue.getItems().remove(j.toString());
+            listViewQueue.getItems().add(j.toString());
         }));
     }
 
     private <T> Consumer<T> runLater(Consumer<T> consumer)
     {
         return t -> Platform.runLater(() -> consumer.accept(t));
-    }
-
-    public static void setRoundRobinSimulator(RoundRobin roundRobinSimulator)
-    {
-        MainController.roundRobinSimulator = roundRobinSimulator;
     }
 
 }

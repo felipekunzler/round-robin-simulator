@@ -32,10 +32,6 @@ public class RoundRobin
         runJobs();
     }
 
-    /*
-    When a job is ran, it may be IO blocked. Which means it'll run (or not?) and go to another queue
-    of blocked processes for x ms. When it is finished, it goes back to the normal queue.
-     */
     private void runJobs()
     {
         while (true) // NOSONAR

@@ -3,12 +3,34 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.felipek.roundrobin.gui.MainController">
-   <children>
-      <ListView fx:id="listViewNew" prefWidth="300" HBox.hgrow="SOMETIMES" />
-      <ListView fx:id="listViewRunning" prefWidth="550" HBox.hgrow="SOMETIMES" />
-      <ListView fx:id="listViewFinished" prefWidth="200" HBox.hgrow="SOMETIMES" />
-      <ListView fx:id="listViewQueue" prefWidth="130" HBox.hgrow="SOMETIMES" />
-      <ListView fx:id="listViewIoQueue" prefWidth="130" HBox.hgrow="SOMETIMES" />
-   </children>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<HBox xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.felipek.roundrobin.gui.MainController">
+    <children>
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Jobs Criados" style="-fx-font-weight: bolder"/>
+            <ListView fx:id="listViewNew" prefWidth="135" VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <VBox HBox.hgrow="ALWAYS">
+        <Label text="Log de execução" style="-fx-font-weight: bolder"/>
+            <ListView fx:id="listViewRunning" prefWidth="380" VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Jobs Finalizados"/>
+            <ListView fx:id="listViewFinished" prefWidth="135" VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Fila de Jobs"/>
+            <ListView fx:id="listViewQueue" prefWidth="135" VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Fila IO Block"/>
+            <ListView fx:id="listViewIoQueue" prefWidth="135" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </children>
 </HBox>

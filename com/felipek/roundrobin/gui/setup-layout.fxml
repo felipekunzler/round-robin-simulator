@@ -10,27 +10,27 @@
     <children>
         <VBox VBox.vgrow="SOMETIMES">
             <Label text="Frequência de novos jobs (ms)" />
-            <TextField fx:id="newJobsFrequencyText" prefWidth="400" promptText="500" />
+            <TextField fx:id="newJobsFrequencyText" prefWidth="400" text="500" />
         </VBox>
 
         <VBox VBox.vgrow="SOMETIMES">
             <Label text="Quantum (ms)" />
-            <TextField fx:id="quantumText" prefWidth="400" promptText="350" />
+            <TextField fx:id="quantumText" prefWidth="400" text="350" />
         </VBox>
 
         <VBox VBox.vgrow="SOMETIMES">
             <Label text="Duração total de vida de um job (ms)" />
-            <TextField fx:id="jobDurationText" prefWidth="400" promptText="700" />
+            <TextField fx:id="jobDurationText" prefWidth="400" text="700" />
         </VBox>
 
         <VBox VBox.vgrow="SOMETIMES">
             <Label text="Porcentagem de jobs serem IO block a cada ciclo (0 - 100)" />
-            <TextField fx:id="ioBlockPercentageText" prefWidth="400" promptText="35" />
+            <TextField fx:id="ioBlockPercentageText" prefWidth="400" text="35" />
         </VBox>
 
         <VBox VBox.vgrow="SOMETIMES">
             <Label text="Tempo de espera por IO (ms)" />
-            <TextField fx:id="ioBlockDurationText" prefWidth="400" promptText="1500" />
+            <TextField fx:id="ioBlockDurationText" prefWidth="400" text="1500" />
         </VBox>
 
         <Separator VBox.vgrow="SOMETIMES" />
