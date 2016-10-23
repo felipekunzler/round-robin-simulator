@@ -3,10 +3,19 @@ package com.felipek.roundrobin.core;
 import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 public class RoundRobin
 {
+    private Lock jobLock = new ReentrantLock(true);
+    private Condition jobCondition = jobLock.newCondition();
+
+    private Lock ioLock = new ReentrantLock(true);
+    private Condition ioCondition = ioLock.newCondition();
+
     private final int newJobsFrequency;
     private final int quantum;
     private final int jobDuration;
@@ -36,8 +45,10 @@ public class RoundRobin
     {
         while (true) // NOSONAR
         {
+            jobLock.lock();
             if (!queue.isEmpty())
             {
+                jobLock.unlock();
                 Job job = queue.poll();
                 int runFor = job.getDuration() >= quantum ? quantum : job.getDuration();
                 onRunJob.accept(String.format(Util.JOB_RUNNING_MSG, job, runFor, job.getDuration()));
@@ -48,6 +59,9 @@ public class RoundRobin
                     {
                         ioQueue.offer(job);
                         onJobIoBlocked.accept(Job.copy(job));
+                        ioLock.lock();
+                        ioCondition.signalAll();
+                        ioLock.unlock();
                     }
                     else
                     {
@@ -62,7 +76,18 @@ public class RoundRobin
             }
             else
             {
-                Util.sleep(100);
+                try
+                {
+                    jobCondition.await();
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+                finally
+                {
+                    jobLock.unlock();
+                }
             }
         }
 
@@ -76,8 +101,11 @@ public class RoundRobin
             {
                 Util.sleep(newJobsFrequency);
                 Job job = Job.createRandomJob(jobDuration);
+                jobLock.lock();
                 queue.add(job);
                 onNewJob.accept(Job.copy(job));
+                jobCondition.signalAll();
+                jobLock.unlock();
             }
         }).start();
     }
@@ -88,8 +116,10 @@ public class RoundRobin
         {
             while (true)
             {
+                ioLock.lock();
                 if (!ioQueue.isEmpty())
                 {
+                    ioLock.unlock();
                     Util.sleep(ioBlockDuration);
                     Job job = ioQueue.poll();
                     queue.offer(job);
@@ -97,7 +127,18 @@ public class RoundRobin
                 }
                 else
                 {
-                   Util.sleep(100);
+                    try
+                    {
+                        ioCondition.await();
+                    }
+                    catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    finally
+                    {
+                        ioLock.unlock();
+                    }
                 }
             }
         }).start();
