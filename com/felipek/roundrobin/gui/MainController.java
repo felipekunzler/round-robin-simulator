@@ -3,6 +3,7 @@ package com.felipek.roundrobin.gui;
 import com.felipek.roundrobin.core.RoundRobin;
 import com.felipek.roundrobin.core.Util;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 
@@ -10,21 +11,27 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-public class Controller implements Initializable
+public class MainController implements Initializable
 {
 
-    public ListView<String> listViewNew;
-    public ListView<String> listViewRunning;
-    public ListView<String> listViewFinished;
-    public ListView<Integer> listViewQueue;
-    public ListView<Integer> listViewIoQueue;
+    @FXML
+    private ListView<String> listViewNew;
+    @FXML
+    private ListView<String> listViewRunning;
+    @FXML
+    private ListView<String> listViewFinished;
+    @FXML
+    private ListView<Integer> listViewQueue;
+    @FXML
+    private ListView<Integer> listViewIoQueue;
+
+    private static RoundRobin roundRobinSimulator;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
         Thread thread = new Thread(() ->
         {
-            RoundRobin roundRobinSimulator = new RoundRobin(500, 350, 700, 0, 1500);
             bindEvents(roundRobinSimulator);
             roundRobinSimulator.start();
         });
@@ -70,6 +77,11 @@ public class Controller implements Initializable
     private <T> Consumer<T> runLater(Consumer<T> consumer)
     {
         return t -> Platform.runLater(() -> consumer.accept(t));
+    }
+
+    public static void setRoundRobinSimulator(RoundRobin roundRobinSimulator)
+    {
+        MainController.roundRobinSimulator = roundRobinSimulator;
     }
 
 }

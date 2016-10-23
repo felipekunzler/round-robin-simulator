@@ -72,11 +72,6 @@ public class RoundRobin
 
     }
 
-    /**
-     * Adiciona novos jobs continuamente em uma thread separada.
-     *
-     * @param newJobsFrequency frequência em ms em que jobs serão criado
-     */
     private void addJobsAsync(int newJobsFrequency)
     {
         new Thread(() ->

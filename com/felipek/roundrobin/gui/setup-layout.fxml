@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="10" style="-fx-padding: 7;" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.felipek.roundrobin.gui.SetupController">
+    <children>
+        <VBox VBox.vgrow="SOMETIMES">
+            <Label text="Frequência de novos jobs (ms)" />
+            <TextField fx:id="newJobsFrequencyText" prefWidth="400" promptText="500" />
+        </VBox>
+
+        <VBox VBox.vgrow="SOMETIMES">
+            <Label text="Quantum (ms)" />
+            <TextField fx:id="quantumText" prefWidth="400" promptText="350" />
+        </VBox>
+
+        <VBox VBox.vgrow="SOMETIMES">
+            <Label text="Duração total de vida de um job (ms)" />
+            <TextField fx:id="jobDurationText" prefWidth="400" promptText="700" />
+        </VBox>
+
+        <VBox VBox.vgrow="SOMETIMES">
+            <Label text="Porcentagem de jobs serem IO block a cada ciclo (0 - 100)" />
+            <TextField fx:id="ioBlockPercentageText" prefWidth="400" promptText="35" />
+        </VBox>
+
+        <VBox VBox.vgrow="SOMETIMES">
+            <Label text="Tempo de espera por IO (ms)" />
+            <TextField fx:id="ioBlockDurationText" prefWidth="400" promptText="1500" />
+        </VBox>
+
+        <Separator VBox.vgrow="SOMETIMES" />
+        <Button fx:id="startButton" onAction="#onStartClick" alignment="CENTER" prefWidth="100" text="Iniciar" VBox.vgrow="SOMETIMES" />
+    </children>
+</VBox>

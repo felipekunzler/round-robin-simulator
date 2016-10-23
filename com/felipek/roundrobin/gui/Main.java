@@ -12,8 +12,9 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("main-layout.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("setup-layout.fxml"));
         Parent root = loader.load();
+        SetupController setupController = loader.getController();
         primaryStage.setTitle("Simulador Round-Robin");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
