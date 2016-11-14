@@ -22,7 +22,10 @@ public class RoundRobin
     private final int ioBlockPercentage;
     private final int ioBlockDuration;
 
+    // Fila de processos a serem executados
     private final Queue<Job> queue = new LinkedBlockingQueue<>();
+
+    // Fila de processos bloqueados por IO
     private final Queue<Job> ioQueue = new LinkedBlockingQueue<>();
 
     public RoundRobin(int newJobsFrequency, int quantum, int jobDuration, int ioBlockPercentage, int ioBlockDuration)
@@ -34,10 +37,16 @@ public class RoundRobin
         this.ioBlockDuration = ioBlockDuration;
     }
 
+    // Método principal que inicia o simulador
     public void start()
     {
+        // Adiciona novos jobs a fila de processos assincronamente
         addJobsAsync(newJobsFrequency);
+
+        // Processa a fila de jobs bloqueados por IO assincronamente
         runIoRequestsAsync();
+
+        // Processa a fila normal de jobs continuamente para sempre
         runJobs();
     }
 
@@ -46,17 +55,22 @@ public class RoundRobin
         while (true) // NOSONAR
         {
             jobLock.lock();
+            // Caso a fila esteja vazia, podemos dar um sleep na thread, que será acordada quando um job surgir
             if (!queue.isEmpty())
             {
                 jobLock.unlock();
+                // Pega o proximo jog a ser processado
                 Job job = queue.poll();
                 int runFor = job.getDuration() >= quantum ? quantum : job.getDuration();
                 onRunJob.accept(String.format(Util.JOB_RUNNING_MSG, job, runFor, job.getDuration()));
+                // Roda o job por seu quantum, ou o tempo restante para ser finalizado caso menor que o quantum
                 job.run(runFor);
                 if (!job.isFinished())
                 {
+                    // Caso o job não tenha finalizado, simular um pedido de IO
                     if (jobNeedsIo())
                     {
+                        // Caso precise de IO, coloca na fila de IO
                         ioQueue.offer(job);
                         onJobIoBlocked.accept(Job.copy(job));
                         ioLock.lock();
@@ -65,6 +79,7 @@ public class RoundRobin
                     }
                     else
                     {
+                        // Se não precisa IO, simplismente coloca de volta no final da fila
                         queue.offer(job);
                         onJobRan.accept(Job.copy(job));
                     }
